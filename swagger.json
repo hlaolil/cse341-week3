@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Grace Pharmacy Users API",
+    "title": "Grace Pharmacy API",
     "version": "1.0.0",
-    "description": "API for managing user accounts for Grace Pharmacy (CSE341 Project)"
+    "description": "API for managing user accounts and patient profiles for Grace Pharmacy (CSE341 Project)"
   },
   "servers": [
     {
@@ -11,7 +11,7 @@
       "description": "Local development server"
     },
     {
-      "url": "https://cse341-week3-3vcu.onrender.com/",
+      "url": "https://cse341-week3-3vcu.onrender.com",
       "description": "Production server (Render)"
     }
   ],
@@ -28,35 +28,11 @@
                 "schema": {
                   "type": "array",
                   "items": { "$ref": "#/components/schemas/User" }
-                },
-                "example": [
-                  {
-                    "_id": "507f1f77bcf86cd799439011",
-                    "patientName": "Jane Doe",
-                    "company": "HealthCorp",
-                    "position": "Patient",
-                    "gender": "Female",
-                    "ageGroup": "31-50",
-                    "email": "jane.doe@example.com",
-                    "createdAt": "2025-09-29T12:00:00Z"
-                  }
-                ]
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
                 }
               }
             }
-          }
+          },
+          "500": { "description": "Server error" }
         }
       },
       "post": {
@@ -66,58 +42,14 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" },
-              "example": {
-                "patientName": "Jane Doe",
-                "company": "HealthCorp",
-                "position": "Patient",
-                "gender": "Female",
-                "ageGroup": "31-50",
-                "email": "jane.doe@example.com"
-              }
+              "schema": { "$ref": "#/components/schemas/User" }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "User created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string", "description": "MongoDB ObjectId of the created user" }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          }
+          "201": { "description": "User created successfully" },
+          "400": { "description": "Invalid input" },
+          "500": { "description": "Server error" }
         }
       }
     },
@@ -129,59 +61,16 @@
           {
             "in": "path",
             "name": "id",
-            "schema": { "type": "string" },
             "required": true,
+            "schema": { "type": "string" },
             "description": "MongoDB ObjectId of the user"
           }
         ],
         "responses": {
-          "200": {
-            "description": "A single user",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/User" }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          }
+          "200": { "description": "A single user", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } },
+          "400": { "description": "Invalid ID format" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Server error" }
         }
       },
       "put": {
@@ -191,8 +80,8 @@
           {
             "in": "path",
             "name": "id",
-            "schema": { "type": "string" },
             "required": true,
+            "schema": { "type": "string" },
             "description": "MongoDB ObjectId of the user"
           }
         ],
@@ -200,59 +89,15 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" },
-              "example": {
-                "patientName": "Jane Doe",
-                "company": "HealthCorp",
-                "position": "Patient",
-                "gender": "Female",
-                "ageGroup": "31-50",
-                "email": "jane.updated@example.com"
-              }
+              "schema": { "$ref": "#/components/schemas/User" }
             }
           }
         },
         "responses": {
           "204": { "description": "User updated successfully" },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          }
+          "400": { "description": "Invalid input" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Server error" }
         }
       },
       "delete": {
@@ -262,52 +107,120 @@
           {
             "in": "path",
             "name": "id",
-            "schema": { "type": "string" },
             "required": true,
+            "schema": { "type": "string" },
             "description": "MongoDB ObjectId of the user"
           }
         ],
         "responses": {
           "204": { "description": "User deleted successfully" },
-          "400": {
-            "description": "Invalid ID format",
+          "400": { "description": "Invalid ID format" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/profiles": {
+      "get": {
+        "summary": "Get all profiles",
+        "tags": ["Profiles"],
+        "responses": {
+          "200": {
+            "description": "List of all profiles",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Profile" }
                 }
               }
             }
           },
-          "404": {
-            "description": "User not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string" }
-                  }
-                }
-              }
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "summary": "Create a new profile",
+        "tags": ["Profiles"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Profile" }
             }
           }
+        },
+        "responses": {
+          "201": { "description": "Profile created successfully" },
+          "400": { "description": "Invalid input" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/profiles/{id}": {
+      "get": {
+        "summary": "Get a single profile by ID",
+        "tags": ["Profiles"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the profile"
+          }
+        ],
+        "responses": {
+          "200": { "description": "A single profile", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Profile" } } } },
+          "400": { "description": "Invalid ID format" },
+          "404": { "description": "Profile not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "put": {
+        "summary": "Update a profile",
+        "tags": ["Profiles"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the profile"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Profile" }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Profile updated successfully" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "Profile not found" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a profile",
+        "tags": ["Profiles"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the profile"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Profile deleted successfully" },
+          "400": { "description": "Invalid ID format" },
+          "404": { "description": "Profile not found" },
+          "500": { "description": "Server error" }
         }
       }
     }
@@ -318,43 +231,26 @@
         "type": "object",
         "required": ["patientName", "company", "position", "gender", "ageGroup", "email"],
         "properties": {
-          "_id": {
-            "type": "string",
-            "description": "Auto-generated MongoDB ID"
-          },
-          "patientName": {
-            "type": "string",
-            "description": "Full name of the patient"
-          },
-          "company": {
-            "type": "string",
-            "description": "Company or organization the user is associated with"
-          },
-          "position": {
-            "type": "string",
-            "description": "User's role or position (e.g., Patient, Pharmacist)"
-          },
-          "gender": {
-            "type": "string",
-            "enum": ["Male", "Female", "Other"],
-            "description": "User's gender"
-          },
-          "ageGroup": {
-            "type": "string",
-            "enum": ["18-30", "31-50", "51+"],
-            "description": "User's age group"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "User's email address"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Account creation date",
-            "example": "2025-09-29T12:00:00Z"
-          }
+          "_id": { "type": "string", "description": "Auto-generated MongoDB ID" },
+          "patientName": { "type": "string" },
+          "company": { "type": "string" },
+          "position": { "type": "string" },
+          "gender": { "type": "string", "enum": ["Male", "Female", "Other"] },
+          "ageGroup": { "type": "string", "enum": ["18-30","31-50","51+"] },
+          "email": { "type": "string", "format": "email" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Profile": {
+        "type": "object",
+        "required": ["chronicMedication", "allergies", "nextOfKin", "phoneNumber"],
+        "properties": {
+          "_id": { "type": "string", "description": "Auto-generated MongoDB ID" },
+          "chronicMedication": { "type": "string" },
+          "allergies": { "type": "string" },
+          "nextOfKin": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" }
         }
       }
     }
