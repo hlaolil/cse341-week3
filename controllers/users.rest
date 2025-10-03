@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:3000
+@userId = 507f1f77bcf86cd799439011
+
+###
+
+### GET all users
+GET {{baseUrl}}/users
+Accept: application/json
+
+###
+
+### GET one user by ID
+GET {{baseUrl}}/users/{{userId}}
+Accept: application/json
+
+###
+
+### POST create a new user
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "patientName": "Jane Doe",
+  "company": "HealthCorp",
+  "position": "Patient",
+  "gender": "Female",
+  "ageGroup": "31-50",
+  "email": "jane.doe@example.com"
+}
+
+###
+
+### PUT update a user
+PUT {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "patientName": "Jane Doe Updated",
+  "company": "HealthCorp",
+  "position": "Patient",
+  "gender": "Female",
+  "ageGroup": "31-50",
+  "email": "jane.doe.updated@example.com"
+}
+
+###
+
+### DELETE a user
+DELETE {{baseUrl}}/users/{{userId}}
+Accept: application/json
+
