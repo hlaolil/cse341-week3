@@ -11,7 +11,7 @@
       "description": "Local development server"
     },
     {
-      "url": "https://your-render-url.onrender.com",
+      "url": "https://cse341-week3-3vcu.onrender.com/",
       "description": "Production server (Render)"
     }
   ],
