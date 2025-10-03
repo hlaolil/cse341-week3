@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const passport = require('passport');
 require('./config/passport');
 const GithubStrategy = require('passport-github2').Strategy;
@@ -31,9 +32,14 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(session({
-  secret: "supersecretkey",
+  secret: process.env.SESSION_SECRET || 'supersecretkey',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collectionName: 'sessions',
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
