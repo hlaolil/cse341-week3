@@ -118,6 +118,13 @@ const updateUser = async (req, res) => {
       return res.status(400).json({ error: 'At least one field must be provided' });
     }
 
+    const db = await mongoDB();
+    if (email) {
+      const existingUser = await db.collection('users').findOne({ email, _id: { $ne: new ObjectId(id) } });
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+    }
 
     const result = await db.collection('users').updateOne(
       { _id: new ObjectId(id) },
