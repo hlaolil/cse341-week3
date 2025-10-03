@@ -58,7 +58,15 @@ app.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
 // GitHub callback
 app.get("/github/callback",
   passport.authenticate("github", { failureRedirect: "/" }),
-  (req, res) => res.redirect("/dashboard")
+  (req, res) => {
+    if (process.env.NODE_ENV === "development") {
+      // Force redirect to your local dashboard
+      res.redirect("http://localhost:3000/dashboard");
+    } else {
+      // Normal production redirect
+      res.redirect("/dashboard");
+    }
+  }
 );
 
 // Logout
