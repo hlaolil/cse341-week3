@@ -1,6 +1,15 @@
 const { ObjectId } = require('mongodb');
 const { mongoDB } = require('../data/database');
 
+// 🔹 Helper to normalize IDs
+function normalizeId(id) {
+  if (ObjectId.isValid(id)) {
+    return new ObjectId(id);
+  }
+  return id; // if it's not ObjectId, just use string
+}
+
+// 🔹 Get all users
 const getAllUsers = async (req, res) => {
   try {
     const db = await mongoDB();
@@ -12,15 +21,13 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// 🔹 Get user by ID
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid ID format' });
-    }
 
     const db = await mongoDB();
-    const user = await db.collection('users').findOne({ _id: new ObjectId(id) });
+    const user = await db.collection('users').findOne({ _id: normalizeId(id) });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -33,6 +40,7 @@ const getUserById = async (req, res) => {
   }
 };
 
+// 🔹 Create new user
 const createUser = async (req, res) => {
   try {
     const { patientName, company, position, gender, ageGroup, email } = req.body;
@@ -79,13 +87,10 @@ const createUser = async (req, res) => {
   }
 };
 
+// 🔹 Update user
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid ID format' });
-    }
-
     const { patientName, company, position, gender, ageGroup, email } = req.body;
 
     const updateFields = {};
@@ -120,14 +125,17 @@ const updateUser = async (req, res) => {
 
     const db = await mongoDB();
     if (email) {
-      const existingUser = await db.collection('users').findOne({ email, _id: { $ne: new ObjectId(id) } });
+      const existingUser = await db.collection('users').findOne({
+        email,
+        _id: { $ne: normalizeId(id) }
+      });
       if (existingUser) {
         return res.status(400).json({ error: 'Email already exists' });
       }
     }
 
     const result = await db.collection('users').updateOne(
-      { _id: new ObjectId(id) },
+      { _id: normalizeId(id) },
       { $set: updateFields }
     );
 
@@ -142,15 +150,13 @@ const updateUser = async (req, res) => {
   }
 };
 
+// 🔹 Delete user
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid ID format' });
-    }
 
     const db = await mongoDB();
-    const result = await db.collection('users').deleteOne({ _id: new ObjectId(id) });
+    const result = await db.collection('users').deleteOne({ _id: normalizeId(id) });
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'User not found' });
